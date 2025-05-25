@@ -5,6 +5,10 @@ public class PaletteWooden : MonoBehaviour
     // 물건이 올라가야할 위치
     public Transform[] pos;
 
+    public Transform botPos;
+
+    public long woodenId;
+
     // 올라간 물건의 갯수
     int count;
     

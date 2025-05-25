@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4837378893594465684}
   - component: {fileID: 1339577611315283770}
   - component: {fileID: 4250309160257913943}
+  - component: {fileID: -2398185967797515375}
   m_Layer: 0
   m_Name: PaletteWooden
   m_TagString: Untagged
@@ -36,6 +37,7 @@ Transform:
   - {fileID: 8627043247535982443}
   - {fileID: 3439503685945864994}
   - {fileID: 5760929190007094892}
+  - {fileID: 839321273515218565}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!33 &4837378893594465684
@@ -108,6 +110,54 @@ MonoBehaviour:
   - {fileID: 8627043247535982443}
   - {fileID: 3439503685945864994}
   - {fileID: 5760929190007094892}
+  botPos: {fileID: 839321273515218565}
+--- !u!208 &-2398185967797515375
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 901988226942282491}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 1, y: 0.125, z: 0.708}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0.098000005, z: 0.047000002}
+  m_TimeToStationary: 0.5
+--- !u!1 &1562170037855216663
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 839321273515218565}
+  m_Layer: 0
+  m_Name: BotPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 4162164826716764455, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &839321273515218565
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1562170037855216663}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8250763075129560579}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1731743911576011334
 GameObject:
   m_ObjectHideFlags: 0
