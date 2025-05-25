@@ -1,7 +1,8 @@
+using Newtonsoft.Json.Linq;
 using TMPro;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+public class GameManager : NetView
 {
     // 나 자신
     public static GameManager instance;
@@ -14,9 +15,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void Start()
+    protected override void Start()
     {
-        
+        base.Start();
     }
 
     void Update()
@@ -33,13 +34,48 @@ public class GameManager : MonoBehaviour
     public bool isOn;
     // 컨베이어 벨트 동작 UI (Text)
     public TMP_Text txtOnOff;
+
+    public bool isServer;
+
+
     public void OnClickOnOff()
     {
-        // true -> false, false -> true
-        isOn = !isOn;
+        if (isServer == false) return;
 
-        // isOn 의 값에 따라서 버튼의 text 변환
-        string s = isOn ? "Stop" : "Start";
-        txtOnOff.SetText(s);
+        JObject jObject = new JObject();
+        jObject["net_id"] = netId;
+        jObject["net_type"] = (int)ENetType.NET_CONVEYOR_IS_ON;
+        jObject["is_on"] = !isOn;
+
+        UDPServer.instance.SendData(jObject.ToString());
+    }
+
+    public void ToggleServer(bool on)
+    {
+        UDPServer.instance.gameObject.SetActive(true);
+        UDPClient.instance.gameObject.SetActive(true);
+        isServer = true;
+    }
+    public void ToggleClient(bool on)
+    {
+        UDPClient.instance.gameObject.SetActive(true);
+    }
+
+    public override void OnMessage(string msg)
+    {
+        base.OnMessage(msg);
+
+        JObject jObject = JObject.Parse(msg);
+        ENetType type = jObject["net_type"].ToObject<ENetType>();
+
+        if(type == ENetType.NET_CONVEYOR_IS_ON)
+        {
+            // true -> false, false -> true
+            isOn = jObject["is_on"].ToObject<bool>();
+
+            // isOn 의 값에 따라서 버튼의 text 변환
+            string s = isOn ? "Stop" : "Start";
+            txtOnOff.SetText(s);
+        }
     }
 }
