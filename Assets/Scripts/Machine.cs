@@ -13,11 +13,11 @@ public class Machine : MonoBehaviour
     // 물건 올려놓고 있는 나무판
     public PaletteWooden wooden;
 
-    // 가득찬 나무판들
-    public List<PaletteWooden> fullWoodenList;
-
     // 가득찬 나무판의 부모
     public Transform trFullWoodenParent;
+
+    // 가득찬 wooden 을 옮겨야 하는 창고
+    public Transform storage;
 
     void Start()
     {
@@ -51,14 +51,14 @@ public class Machine : MonoBehaviour
                 // 만약에 나무판이 가득 찼다면
                 if(isFull)
                 {
-                    // 가득찬 나무판 woodenList에 추가
-                    fullWoodenList.Add(wooden);
-
                     // 가득찬 나무판을 trFullWoodenParent 의 자식으로!
                     wooden.transform.parent = trFullWoodenParent;
 
                     // 가득판 나무판 갯수에 따라서 위치를 변경
                     trFullWoodenParent.localPosition += Vector3.left * 2;
+
+                    // 로봇에게 wooden 옮기라고 명령
+                    GameManager.instance.FindClosestBot(wooden.transform, storage);
 
                     // 새로운 나무판을 만들자.
                     CreateWooden();
@@ -66,4 +66,5 @@ public class Machine : MonoBehaviour
             }
         }
     }
+
 }
