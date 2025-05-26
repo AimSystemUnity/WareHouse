@@ -1,20 +1,19 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class Conveyor : MonoBehaviour
 {
-    // ¼Ó·Â
+    // ì†ë ¥
     public float speed = 0.5f;
 
-    // º§Æ®
+    // ë²¨íŠ¸
     public GameObject belt;
 
-    // º§Æ® ¸ÅÅÍ¸®¾ó
+    // ë²¨íŠ¸ ë§¤í„°ë¦¬ì–¼
     Material matBelt;
-
 
     void Start()
     {
-        // º§Æ® ¸ÅÅÍ¸®¾óÀ» °¡Á®¿ÀÀÚ.
+        // ë²¨íŠ¸ ë§¤í„°ë¦¬ì–¼ì„ ê°€ì ¸ì˜¤ì.
         MeshRenderer mr = belt.GetComponent<MeshRenderer>();
         matBelt = mr.material;
     }
@@ -23,7 +22,7 @@ public class Conveyor : MonoBehaviour
     {
         if (GameManager.instance.isOn == false) return;
 
-        // º§Æ® ¸ÅÅÍ¸®¾óÀÇ offset °ªÀ» º¯°æ        
+        // ë²¨íŠ¸ ë§¤í„°ë¦¬ì–¼ì˜ offset ê°’ì„ ë³€ê²½        
         Vector2 offset = matBelt.mainTextureOffset;
         offset += Vector2.down * speed * Time.deltaTime;
         offset.y %= 1;

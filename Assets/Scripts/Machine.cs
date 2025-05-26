@@ -1,24 +1,23 @@
-
+ï»¿
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Machine : MonoBehaviour
 {
-    // ºĞ·ù ÇÒ ¹°°Ç type
+    // ë¶„ë¥˜ í•  ë¬¼ê±´ type
     public MyObject.EObjectType type;
 
-    // ³ª¹«ÆÇ Prefab
+    // ë‚˜ë¬´íŒ Prefab
     public GameObject woodenPrefab;
 
-    // ¹°°Ç ¿Ã·Á³õ°í ÀÖ´Â ³ª¹«ÆÇ
+    // ë¬¼ê±´ ì˜¬ë ¤ë†“ê³  ìˆëŠ” ë‚˜ë¬´íŒ
     public PaletteWooden wooden;
 
-    // °¡µæÂù ³ª¹«ÆÇµé
+    // ê°€ë“ì°¬ ë‚˜ë¬´íŒë“¤
     public List<PaletteWooden> fullWoodenList;
 
-    // °¡µæÂù ³ª¹«ÆÇÀÇ ºÎ¸ğ
+    // ê°€ë“ì°¬ ë‚˜ë¬´íŒì˜ ë¶€ëª¨
     public Transform trFullWoodenParent;
-
 
     void Start()
     {
@@ -32,36 +31,36 @@ public class Machine : MonoBehaviour
 
     void CreateWooden()
     {
-        // ³ª¹«ÆÇÀ» ¸¸µç´Ù (³ªÀÇ ÀÚ½ÄÀ¸·Î)
+        // ë‚˜ë¬´íŒì„ ë§Œë“ ë‹¤ (ë‚˜ì˜ ìì‹ìœ¼ë¡œ)
         GameObject go = Instantiate(woodenPrefab, transform);
-        // »ı¼ºµÈ ³ª¹«ÆÇ¿¡¼­  PaletteWooden ÄÄÆ÷³ÍÆ® °¡Á®¿À±â
+        // ìƒì„±ëœ ë‚˜ë¬´íŒì—ì„œ  PaletteWooden ì»´í¬ë„ŒíŠ¸ ê°€ì ¸ì˜¤ê¸°
         wooden = go.GetComponent<PaletteWooden>();
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        // ºÎµúÈù ¹°Ã¼°¡ MyObject ÄÄÆ÷³ÍÆ®¸¦ °¡Á®¿ÀÀÚ.
+        // ë¶€ë”ªíŒ ë¬¼ì²´ê°€ MyObject ì»´í¬ë„ŒíŠ¸ë¥¼ ê°€ì ¸ì˜¤ì.
         MyObject myObject = other.GetComponentInParent<MyObject>();
         if(myObject != null)
         {
-            // Ãæµ¹ÇÑ ¹°Ã¼ type °ú ºĞ·ù ÇÒ ¹°°Ç type °°´Ù¸é
+            // ì¶©ëŒí•œ ë¬¼ì²´ type ê³¼ ë¶„ë¥˜ í•  ë¬¼ê±´ type ê°™ë‹¤ë©´
             if(myObject.type == type)
             {
-                // Ãæµ¹ÇÑ ¹°Ã¼¸¦ ³ª¹«ÆÇ¿¡ ¿Å±âÀÚ.
+                // ì¶©ëŒí•œ ë¬¼ì²´ë¥¼ ë‚˜ë¬´íŒì— ì˜®ê¸°ì.
                 bool isFull = wooden.AddObject(myObject);
-                // ¸¸¾à¿¡ ³ª¹«ÆÇÀÌ °¡µæ Ã¡´Ù¸é
+                // ë§Œì•½ì— ë‚˜ë¬´íŒì´ ê°€ë“ ì°¼ë‹¤ë©´
                 if(isFull)
                 {
-                    // °¡µæÂù ³ª¹«ÆÇ woodenList¿¡ Ãß°¡
+                    // ê°€ë“ì°¬ ë‚˜ë¬´íŒ woodenListì— ì¶”ê°€
                     fullWoodenList.Add(wooden);
 
-                    // °¡µæÂù ³ª¹«ÆÇÀ» trFullWoodenParent ÀÇ ÀÚ½ÄÀ¸·Î!
+                    // ê°€ë“ì°¬ ë‚˜ë¬´íŒì„ trFullWoodenParent ì˜ ìì‹ìœ¼ë¡œ!
                     wooden.transform.parent = trFullWoodenParent;
 
-                    // °¡µæÆÇ ³ª¹«ÆÇ °¹¼ö¿¡ µû¶ó¼­ À§Ä¡¸¦ º¯°æ
+                    // ê°€ë“íŒ ë‚˜ë¬´íŒ ê°¯ìˆ˜ì— ë”°ë¼ì„œ ìœ„ì¹˜ë¥¼ ë³€ê²½
                     trFullWoodenParent.localPosition += Vector3.left * 2;
 
-                    // »õ·Î¿î ³ª¹«ÆÇÀ» ¸¸µéÀÚ.
+                    // ìƒˆë¡œìš´ ë‚˜ë¬´íŒì„ ë§Œë“¤ì.
                     CreateWooden();
                 }
             }

@@ -1,9 +1,9 @@
-using TMPro;
+ï»¿using TMPro;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    // ³ª ÀÚ½Å
+    // ë‚˜ ìì‹ 
     public static GameManager instance;
 
     private void Awake()
@@ -24,22 +24,23 @@ public class GameManager : MonoBehaviour
         
     }
 
-    // º¯¼ö¸¦ Inspector ¿¡ ³ëÃâ (º¯¼ö°¡ public, private »ó°ü¾øÀÌ)
+    // ë³€ìˆ˜ë¥¼ Inspector ì— ë…¸ì¶œ (ë³€ìˆ˜ê°€ public, private ìƒê´€ì—†ì´)
     [SerializeField]
     int number = 10;
 
-    // ÄÁº£ÀÌ¾î º§Æ® µ¿ÀÛ À¯¹« 
-    //[HideInInspector] // º¯¼ö¸¦ Inspector¿¡¼­ ³ëÃâµÇÁö ¾Ê°Ô ÇÏ±â
+    // ì»¨ë² ì´ì–´ ë²¨íŠ¸ ë™ì‘ ìœ ë¬´ 
+    //[HideInInspector] // ë³€ìˆ˜ë¥¼ Inspectorì—ì„œ ë…¸ì¶œë˜ì§€ ì•Šê²Œ í•˜ê¸°
     public bool isOn;
-    // ÄÁº£ÀÌ¾î º§Æ® µ¿ÀÛ UI (Text)
+    // ì»¨ë² ì´ì–´ ë²¨íŠ¸ ë™ì‘ UI (Text)
     public TMP_Text txtOnOff;
     public void OnClickOnOff()
     {
         // true -> false, false -> true
         isOn = !isOn;
 
-        // isOn ÀÇ °ª¿¡ µû¶ó¼­ ¹öÆ°ÀÇ text º¯È¯
+        // isOn ì˜ ê°’ì— ë”°ë¼ì„œ ë²„íŠ¼ì˜ text ë³€í™˜
         string s = isOn ? "Stop" : "Start";
         txtOnOff.SetText(s);
     }
 }
+

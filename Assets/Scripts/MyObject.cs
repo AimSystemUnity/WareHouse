@@ -1,8 +1,8 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class MyObject : MonoBehaviour
 {
-    // ¿ÀºêÁ§Æ® Á¾·ù Á¤ÀÇ
+    // ì˜¤ë¸Œì íŠ¸ ì¢…ë¥˜ ì •ì˜
     public enum EObjectType
     {
         BARREL,
@@ -11,13 +11,13 @@ public class MyObject : MonoBehaviour
         MAX
     }
 
-    // ¿ÀºêÁ§Æ® ¿ÜÇüµé
+    // ì˜¤ë¸Œì íŠ¸ ì™¸í˜•ë“¤
     public GameObject[] objectPrefabs;
 
-    // ³ªÀÇ ¿ÀºêÁ§Æ® Á¾·ù
+    // ë‚˜ì˜ ì˜¤ë¸Œì íŠ¸ ì¢…ë¥˜
     public EObjectType type;
 
-    // ¿ÀºêÁ§Æ® ÀÌµ¿ ¼Ó·Â
+    // ì˜¤ë¸Œì íŠ¸ ì´ë™ ì†ë ¥
     float speed = 0.5f * 1.95f;
 
 
@@ -30,18 +30,18 @@ public class MyObject : MonoBehaviour
     {
         if (GameManager.instance.isOn == false) return;
 
-        // ¾Õ ¹æÇâÀ¸·Î ÀÌµ¿ÇÏ°í ½Í´Ù.
+        // ì• ë°©í–¥ìœ¼ë¡œ ì´ë™í•˜ê³  ì‹¶ë‹¤.
         transform.position += transform.forward * speed * Time.deltaTime;
     }
 
     public void CreateObject(int objType)
     {
-        // objType ¹øÂ°ÀÇ ¿ÀºêÁ§Æ®¸¦ »ı¼º 
+        // objType ë²ˆì§¸ì˜ ì˜¤ë¸Œì íŠ¸ë¥¼ ìƒì„± 
         GameObject go = Instantiate(objectPrefabs[objType], transform);
 
         // go.transform.parent = null;
 
-        // objType À» type ¿¡ ¼³Á¤
+        // objType ì„ type ì— ì„¤ì •
         type = (EObjectType)objType;
     }
 }

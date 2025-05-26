@@ -1,13 +1,13 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class ObjectCreator : MonoBehaviour
 {
     // MyObject Prefab
     public GameObject myObjectPrefab;
 
-    // »ı¼º½Ã°£
+    // ìƒì„±ì‹œê°„
     public float createTime = 3;
-    // ÇöÀç½Ã°£
+    // í˜„ì¬ì‹œê°„
     float currTime;
 
     void Start()
@@ -19,23 +19,23 @@ public class ObjectCreator : MonoBehaviour
     {
         if (GameManager.instance.isOn == false) return;
 
-        // ½Ã°£À» Èå¸£°Ô ÇÏÀÚ.
+        // ì‹œê°„ì„ íë¥´ê²Œ í•˜ì.
         currTime += Time.deltaTime;
-        // ¸¸¾à¿¡ ÇöÀç½Ã°£ÀÌ »ı¼º½Ã°£º¸´Ù Ä¿Áö¸é
+        // ë§Œì•½ì— í˜„ì¬ì‹œê°„ì´ ìƒì„±ì‹œê°„ë³´ë‹¤ ì»¤ì§€ë©´
         if(currTime > createTime)
         {
-            // MyObject »ı¼º
+            // MyObject ìƒì„±
             GameObject go = Instantiate(myObjectPrefab);
-            // À§Ä¡¸¦ ³ªÀÇ À§Ä¡¿¡ ³õÀÚ.
+            // ìœ„ì¹˜ë¥¼ ë‚˜ì˜ ìœ„ì¹˜ì— ë†“ì.
             go.transform.position = transform.position;
-            // ÇöÀç½Ã°£ ÃÊ±âÈ­
+            // í˜„ì¬ì‹œê°„ ì´ˆê¸°í™”
             currTime = 0;
 
-            // ·£´ıÇÑ ¿ÀºêÁ§Æ® »ÌÀÚ
+            // ëœë¤í•œ ì˜¤ë¸Œì íŠ¸ ë½‘ì
             int type = Random.Range(0, (int)MyObject.EObjectType.MAX);
-            // MyObject ÄÄÆ÷³ÍÆ® °¡Á®¿ÀÀÚ
+            // MyObject ì»´í¬ë„ŒíŠ¸ ê°€ì ¸ì˜¤ì
             MyObject myObject = go.GetComponent<MyObject>();
-            // »ÌÈù ¿ÀºêÁ§Æ®¸¦ Àü´ŞÇØ¼­ »ı¼º
+            // ë½‘íŒ ì˜¤ë¸Œì íŠ¸ë¥¼ ì „ë‹¬í•´ì„œ ìƒì„±
             myObject.CreateObject(type);
         }
     }

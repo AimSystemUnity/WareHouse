@@ -1,25 +1,25 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class PaletteWooden : MonoBehaviour
 {
-    // ¹°°ÇÀÌ ¿Ã¶ó°¡¾ßÇÒ À§Ä¡
+    // ë¬¼ê±´ì´ ì˜¬ë¼ê°€ì•¼í•  ìœ„ì¹˜
     public Transform[] pos;
 
-    // ¿Ã¶ó°£ ¹°°ÇÀÇ °¹¼ö
+    // ì˜¬ë¼ê°„ ë¬¼ê±´ì˜ ê°¯ìˆ˜
     int count;
     
     public bool AddObject(MyObject obj)
     {
-        // obj ºñÈ°¼ºÈ­
+        // obj ë¹„í™œì„±í™”
         obj.enabled = false;
-        // ¹°°ÇÀÇ ºÎ¸ğ¸¦ ³ª¹«ÆÇ¿¡ Ãß°¡ÇÑ À§Ä¡ ¿ÀºêÁ§Æ®ÀÇ count ¹øÂ°·Î ¼³Á¤
+        // ë¬¼ê±´ì˜ ë¶€ëª¨ë¥¼ ë‚˜ë¬´íŒì— ì¶”ê°€í•œ ìœ„ì¹˜ ì˜¤ë¸Œì íŠ¸ì˜ count ë²ˆì§¸ë¡œ ì„¤ì •
         obj.transform.parent = pos[count];
-        // ¹°°ÇÀÇ ·ÎÄÃÀ§Ä¡¸¦ zero ·Î ¼³Á¤
+        // ë¬¼ê±´ì˜ ë¡œì»¬ìœ„ì¹˜ë¥¼ zero ë¡œ ì„¤ì •
         obj.transform.localPosition = Vector3.zero;
-        // ¹°°Ç ¿Ã¶ó°£ °¹¼ö ÇÏ³ª Áõ°¡
+        // ë¬¼ê±´ ì˜¬ë¼ê°„ ê°¯ìˆ˜ í•˜ë‚˜ ì¦ê°€
         count++;
 
-        // »ı¼ºµÈ °¹¼ö¿Í À§Ä¡ °¹¼ö ºñ±³ ¹İÈ¯
+        // ìƒì„±ëœ ê°¯ìˆ˜ì™€ ìœ„ì¹˜ ê°¯ìˆ˜ ë¹„êµ ë°˜í™˜
         return count == pos.Length;
     }
 }

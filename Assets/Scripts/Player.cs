@@ -1,49 +1,49 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    // ¿òÁ÷ÀÏ ¼ö ÀÖ´Ï?
+    // ì›€ì§ì¼ ìˆ˜ ìˆë‹ˆ?
     bool canMove;
 
-    // ÀÌµ¿ ¼Ó·Â
+    // ì´ë™ ì†ë ¥
     public float moveSpeed = 5;
 
-    // È¸Àü ¼Ó·Â
+    // íšŒì „ ì†ë ¥
     public float rotSpeed = 200;
 
-    // È¸Àü °ª
+    // íšŒì „ ê°’
     float rotX;
     float rotY;
 
     void Start()
     {
-        // Ã³À½ °¢µµ¸¦ rotX, rotY ¿¡ ¼³Á¤
+        // ì²˜ìŒ ê°ë„ë¥¼ rotX, rotY ì— ì„¤ì •
         rotX = transform.eulerAngles.x;
         rotY = transform.eulerAngles.y;
     }
 
     void Update()
     {
-        // ¸¸¾à¿¡ canMove °¡ false ¸é ÇÔ¼ö ³ª°¡ÀÚ.
+        // ë§Œì•½ì— canMove ê°€ false ë©´ í•¨ìˆ˜ ë‚˜ê°€ì.
         if (CanMove() == false) return;
 
         ChangeMoveSpeed();
         Move();
-        Rotate();
+        Rotate();   
     }
 
     bool CanMove()
     {
-        // ¸¸¾à¿¡ ¸¶¿ì½º ¿À¸¥ÂÊ ¹öÆ°À» ´©¸£¸é
+        // ë§Œì•½ì— ë§ˆìš°ìŠ¤ ì˜¤ë¥¸ìª½ ë²„íŠ¼ì„ ëˆ„ë¥´ë©´
         if(Input.GetMouseButtonDown(1))
         {
-            // canMove ¸¦ true
+            // canMove ë¥¼ true
             canMove = true;
         }
-        // ¸¸¾à¿¡ ¸¶¿ì½º ¿À¸¥ÂÊ ¹öÆ°À» ¶¼¸é
+        // ë§Œì•½ì— ë§ˆìš°ìŠ¤ ì˜¤ë¥¸ìª½ ë²„íŠ¼ì„ ë–¼ë©´
         else if(Input.GetMouseButtonUp(1))
         {
-            // canMove ¸¦ false
+            // canMove ë¥¼ false
             canMove = false;
         }
         return canMove;
@@ -51,36 +51,36 @@ public class Player : MonoBehaviour
 
     void ChangeMoveSpeed()
     {
-        // ¸¶¿ì½º ÈÙ µ¹¸®´Â °ªÀ» ¹Ş¾Æ¿ÀÀÚ.
+        // ë§ˆìš°ìŠ¤ íœ  ëŒë¦¬ëŠ” ê°’ì„ ë°›ì•„ì˜¤ì.
         float wheel = Input.GetAxis("Mouse ScrollWheel");
-        // ±× °ªÀ¸·Î moveSpeed °ªÀ» º¯°æÇÏÀÚ.
+        // ê·¸ ê°’ìœ¼ë¡œ moveSpeed ê°’ì„ ë³€ê²½í•˜ì.
         moveSpeed += wheel;
     }
 
     void Move()
     {
-        // W, A, S, D Å°ÀÇ ÀÔ·ÂÀ» ¹ŞÀÚ.
+        // W, A, S, D í‚¤ì˜ ì…ë ¥ì„ ë°›ì.
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
 
-        // ÀÔ·Â ¹ŞÀº °ªÀ¸·Î ¹æÇâÀ» ±¸ÇÏÀÚ.
+        // ì…ë ¥ ë°›ì€ ê°’ìœ¼ë¡œ ë°©í–¥ì„ êµ¬í•˜ì.
         Vector3 dir = transform.right * h + transform.forward * v;
 
-        // ±¸ÇÑ ¹æÇâÀ¸·Î ¿òÁ÷ÀÌÀÚ.
+        // êµ¬í•œ ë°©í–¥ìœ¼ë¡œ ì›€ì§ì´ì.
         transform.position += dir * moveSpeed * Time.deltaTime;
     }
 
     void Rotate()
     {
-        // ¸¶¿ì½º ¿òÁ÷ÀÓ°ªÀ» ¹Ş¾Æ¿ÀÀÚ.
+        // ë§ˆìš°ìŠ¤ ì›€ì§ì„ê°’ì„ ë°›ì•„ì˜¤ì.
         float mx = Input.GetAxis("Mouse X");
         float my = Input.GetAxis("Mouse Y");
 
-        // È¸Àü °ªÀ» ´©Àû
+        // íšŒì „ ê°’ì„ ëˆ„ì 
         rotX += my * rotSpeed * Time.deltaTime;
         rotY += mx * rotSpeed * Time.deltaTime;
 
-        // ¿ÀºêÁ§Æ®¸¦ È¸Àü °ªÀ¸·Î ¼³Á¤
+        // ì˜¤ë¸Œì íŠ¸ë¥¼ íšŒì „ ê°’ìœ¼ë¡œ ì„¤ì •
         transform.eulerAngles = new Vector3(-rotX, rotY, 0); 
 
     }
