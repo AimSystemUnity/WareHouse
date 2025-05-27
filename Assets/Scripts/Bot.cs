@@ -142,9 +142,9 @@ public class Bot : MonoBehaviour
         }
         else
         {
-            // 방향을 나의 앞방향으로
+            //// 방향을 나의 앞방향으로
             //transform.forward = dir.normalized;
-            // 나의 앞방으로 이동하자.
+            //// 나의 앞방으로 이동하자.
             //transform.position += transform.forward * 10 * Time.deltaTime;
 
             // 목적지로 이동하자.

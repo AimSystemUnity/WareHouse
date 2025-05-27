@@ -22,7 +22,8 @@ public class Player : MonoBehaviour
         rotY = transform.eulerAngles.y;
     }
 
-
+    // 마우스 클릭으로 체크하고 싶은 Layer
+    public LayerMask layerMask;
     void Update()
     {
         // 만약에 왼쪽 마우스를 누르면
@@ -32,10 +33,14 @@ public class Player : MonoBehaviour
             //Ray ray = new Ray(transform.position, transform.forward);
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             // Ray 이용해서 Raycast 실행
-            // 만약에 어딘가에 부딪혔다면
+            // 만약에 어딘가에 부딪혔다면           
+
             RaycastHit hit;
-            if(Physics.Raycast(ray, out hit, float.MaxValue))
+            // Physics.SphereCast
+            if(Physics.Raycast(ray, out hit, float.MaxValue, layerMask))
             {
+                print(hit.collider.name);
+
                 // 만약에 부딪힌 물체가 Pc.008 이면
                 if(hit.collider.name.Contains("Pc.008"))
                 {

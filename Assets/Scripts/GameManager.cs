@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TMPro;
-using Unity.Hierarchy;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -39,6 +39,8 @@ public class GameManager : MonoBehaviour
     // 모든 Bot 가지는 변수
     public List<Bot> allBot = new List<Bot>();
 
+    // OnOff 가 클릭되어있을 때 호출되는 함수를 가지는 변수
+    public Action delegateOnOff;
 
     public void OnClickOnOff()
     {
@@ -48,6 +50,12 @@ public class GameManager : MonoBehaviour
         // isOn 의 값에 따라서 버튼의 text 변환
         string s = isOn ? "Stop" : "Start";
         txtOnOff.SetText(s);
+
+        if(delegateOnOff != null)
+        {
+            // delegateOnOff 에 들어있는 함수를 호출
+            delegateOnOff();
+        }
     }
 
     public void FindClosestBot(Transform wooden, Transform storage)

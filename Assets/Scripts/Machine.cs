@@ -25,6 +25,9 @@ public class Machine : MonoBehaviour
     void Start()
     {
         CreateWooden();
+
+        // 컨베이어 벨트 돌아가면 기계도 동작하게
+        GameManager.instance.delegateOnOff += OnOff;
     }
 
     void Update()
@@ -85,5 +88,4 @@ public class Machine : MonoBehaviour
             anims[i].enabled = isOn;
         }
     }
-
 }
