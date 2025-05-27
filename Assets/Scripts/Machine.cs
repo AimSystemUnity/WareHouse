@@ -19,6 +19,9 @@ public class Machine : MonoBehaviour
     // 가득찬 wooden 을 옮겨야 하는 창고
     public Transform storage;
 
+    // 분류를 할 수 있는지
+    bool isOn;
+
     void Start()
     {
         CreateWooden();
@@ -39,6 +42,9 @@ public class Machine : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        // 만약에 동작이 꺼져있으면 함수를 나가자.
+        if (isOn == false) return;
+
         // 부딪힌 물체가 MyObject 컴포넌트를 가져오자.
         MyObject myObject = other.GetComponentInParent<MyObject>();
         if(myObject != null)
@@ -64,6 +70,19 @@ public class Machine : MonoBehaviour
                     CreateWooden();
                 }
             }
+        }
+    }
+
+    public void OnOff()
+    {
+        // false -> true, true -> false
+        isOn = !isOn;
+
+        // 나에게 붙어있는 Animator 컴포넌트 가져오자.
+        Animator[] anims = GetComponentsInChildren<Animator>();
+        for(int i = 0; i < anims.Length; i++)
+        {
+            anims[i].enabled = isOn;
         }
     }
 

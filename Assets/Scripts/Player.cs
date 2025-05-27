@@ -22,8 +22,32 @@ public class Player : MonoBehaviour
         rotY = transform.eulerAngles.y;
     }
 
+
     void Update()
     {
+        // 만약에 왼쪽 마우스를 누르면
+        if(Input.GetMouseButtonDown(0))
+        {
+            // cube 위치에서 cube 앞방향으로 설정된 Ray 를 만든다.
+            //Ray ray = new Ray(transform.position, transform.forward);
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            // Ray 이용해서 Raycast 실행
+            // 만약에 어딘가에 부딪혔다면
+            RaycastHit hit;
+            if(Physics.Raycast(ray, out hit, float.MaxValue))
+            {
+                // 만약에 부딪힌 물체가 Pc.008 이면
+                if(hit.collider.name.Contains("Pc.008"))
+                {
+                    // 부모의 컴포넌트 중 Machine 가져오자.
+                    Machine machine = hit.collider.GetComponentInParent<Machine>();
+                    // 가져온 컴포넌트의 기능 중 OnOff 함수 실행
+                    machine.OnOff();
+                }
+            }
+        }
+
+
         // 만약에 canMove 가 false 면 함수 나가자.
         if (CanMove() == false) return;
 
@@ -84,4 +108,7 @@ public class Player : MonoBehaviour
         transform.eulerAngles = new Vector3(-rotX, rotY, 0); 
 
     }
+
+   
+
 }
