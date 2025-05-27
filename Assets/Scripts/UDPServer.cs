@@ -17,6 +17,8 @@ public class UDPServer : MonoBehaviour
         // 서버 객체 생성
         udpServer = new UdpClient(port);
 
+        print("서버 시작!!!");
+
         // 클라이언트에서 메시지 받을 함수 등록
         udpServer.BeginReceive(ReceiveData, null);
     }
@@ -34,6 +36,8 @@ public class UDPServer : MonoBehaviour
         // byte 배열을  string 값으로 변환
         string receiveMessage = Encoding.UTF8.GetString(receiveBytes);
 
+        print(receiveMessage);
+
         // 클라이언트에서 메시지 받을 함수 등록
         udpServer.BeginReceive(ReceiveData, null);
     }
@@ -42,5 +46,7 @@ public class UDPServer : MonoBehaviour
     {
         // 서버 종료
         udpServer.Close();
+
+        print("서버 종료");
     }
 }
