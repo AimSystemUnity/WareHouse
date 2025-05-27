@@ -7,7 +7,8 @@ using System.Collections.Generic;
 public enum ENetType
 {
     NET_CONVEYOR_IS_ON,
-    NET_CREATE_MY_OBJECT
+    NET_CREATE_MY_OBJECT,
+    NET_POSITION
 }
 
 public class UDPServer : MonoBehaviour
