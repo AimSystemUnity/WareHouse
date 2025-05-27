@@ -5,8 +5,25 @@ using System.Net.Sockets;
 using System.Text;
 using UnityEngine;
 
+public enum ENetType
+{
+    NET_CONVEYOR_IS_ON
+}
+
 public class UDPServer : MonoBehaviour
 {
+    // 나 자신
+    public static UDPServer instance;
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            gameObject.SetActive(false);
+        }
+    }
+
+
     // 서버 객체 
     UdpClient udpServer;
 
@@ -39,7 +56,7 @@ public class UDPServer : MonoBehaviour
         }
     }
 
-    void SendData(string message)
+    public void SendData(string message)
     {
         // string 을 byte 배열로
         byte[] sendBytes = Encoding.UTF8.GetBytes(message);
@@ -73,9 +90,12 @@ public class UDPServer : MonoBehaviour
 
     private void OnDestroy()
     {
-        // 서버 종료
-        udpServer.Close();
+        if(udpServer != null)
+        {
+            // 서버 종료
+            udpServer.Close();
 
-        print("서버 종료");
+            print("서버 종료");
+        }
     }
 }

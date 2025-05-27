@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -42,20 +44,67 @@ public class GameManager : MonoBehaviour
     // OnOff 가 클릭되어있을 때 호출되는 함수를 가지는 변수
     public Action delegateOnOff;
 
+    // ToggleServer
+    public Toggle toggleServerUI;
+    // ToggleClient
+    public Toggle toggleClientUI;
+
+    // 서버인지 여부
+    public bool isServer;
+
+    public void OnToggleServer(bool on)
+    {
+        // 내가 서버이다
+        isServer = true;
+        // 체크 박스 UI 비활성화
+        toggleServerUI.interactable = false;
+        // UDPServer 게임오브젝트 활성화
+        UDPServer.instance.gameObject.SetActive(true);
+    }
+
+    public void OnToggleClient(bool on)
+    {
+        // 체크 박스 UI 비활성화
+        toggleServerUI.interactable = false;
+        // UDPClient 게임오브젝트 활성화
+        UDPClient.instance.gameObject.SetActive(true);
+    }
+
     public void OnClickOnOff()
     {
-        // true -> false, false -> true
-        isOn = !isOn;
+        // 만약 서버가 아니면 함수 나가자.
+        if (isServer == false) return;
 
-        // isOn 의 값에 따라서 버튼의 text 변환
-        string s = isOn ? "Stop" : "Start";
-        txtOnOff.SetText(s);
+        // 클라에게 보내고자 하는 Json 데이터를 만들자.
+        JObject jObject = new JObject();
+        jObject["net_type"] = (int)ENetType.NET_CONVEYOR_IS_ON;
+        jObject["is_on"] = !isOn;
 
-        if(delegateOnOff != null)
+        // 클라에 전송
+        UDPServer.instance.SendData(jObject.ToString());
+    }
+
+    public void OnOff(string message)
+    {
+        // message --> JObject 변환
+        JObject jObject = JObject.Parse(message);
+        ENetType type = jObject["net_type"].ToObject<ENetType>();
+
+        if(type == ENetType.NET_CONVEYOR_IS_ON)
         {
-            // delegateOnOff 에 들어있는 함수를 호출
-            delegateOnOff();
-        }
+            // true -> false, false -> true
+            isOn = jObject["is_on"].ToObject<bool>();
+
+            // isOn 의 값에 따라서 버튼의 text 변환
+            string s = isOn ? "Stop" : "Start";
+            txtOnOff.SetText(s);
+
+            if (delegateOnOff != null)
+            {
+                // delegateOnOff 에 들어있는 함수를 호출
+                delegateOnOff();
+            }
+        }        
     }
 
     public void FindClosestBot(Transform wooden, Transform storage)
