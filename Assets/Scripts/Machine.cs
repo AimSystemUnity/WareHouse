@@ -63,7 +63,9 @@ public class Machine : NetView
                 JObject jObject = new JObject();
                 jObject["net_id"] = netId;
                 jObject["net_type"] = (int)ENetType.NET_ADD_OBJECT;
-                //jObject["my_object"] = myObject.ToString();
+                jObject["my_object_id"] = myObject.myObjectId;
+
+                UDPServer.instance.SendData(jObject.ToString());
             }
         }
     }
@@ -72,23 +74,29 @@ public class Machine : NetView
     {
         JObject jObject = base.OnMessage(message);
 
-        //// 충돌한 물체를 나무판에 옮기자.
-        //bool isFull = wooden.AddObject(myObject);
-        //// 만약에 나무판이 가득 찼다면
-        //if (isFull)
-        //{
-        //    // 가득찬 나무판을 trFullWoodenParent 의 자식으로!
-        //    wooden.transform.parent = trFullWoodenParent;
+        if (jObject["net_type"].ToObject<ENetType>() == ENetType.NET_ADD_OBJECT)
+        {
+            // myObject 를 가져오자.
+            MyObject myObject = ObjectCreator.instance.GetObject(jObject["my_object_id"].ToObject<long>());
 
-        //    // 가득판 나무판 갯수에 따라서 위치를 변경
-        //    trFullWoodenParent.localPosition += Vector3.left * 2;
+            // 충돌한 물체를 나무판에 옮기자.
+            bool isFull = wooden.AddObject(myObject);
+            // 만약에 나무판이 가득 찼다면
+            if (isFull)
+            {
+                // 가득찬 나무판을 trFullWoodenParent 의 자식으로!
+                wooden.transform.parent = trFullWoodenParent;
 
-        //    // 로봇에게 wooden 옮기라고 명령
-        //    GameManager.instance.FindClosestBot(wooden.transform, storage);
+                // 가득판 나무판 갯수에 따라서 위치를 변경
+                trFullWoodenParent.localPosition += Vector3.left * 2;
 
-        //    // 새로운 나무판을 만들자.
-        //    CreateWooden();
-        //}
+                // 로봇에게 wooden 옮기라고 명령
+                GameManager.instance.FindClosestBot(wooden.transform, storage);
+
+                // 새로운 나무판을 만들자.
+                CreateWooden();
+            }
+        }
 
         return jObject;
     }

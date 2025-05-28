@@ -20,6 +20,8 @@ public class MyObject : MonoBehaviour
     // 오브젝트 이동 속력
     float speed = 0.5f * 1.95f;
 
+    // 오브젝트 id
+    public long myObjectId;
 
     void Start()
     {
@@ -34,12 +36,13 @@ public class MyObject : MonoBehaviour
         transform.position += transform.forward * speed * Time.deltaTime;
     }
 
-    public void CreateObject(int objType)
+    public void CreateObject(int objType, long id)
     {
         // objType 번째의 오브젝트를 생성 
         GameObject go = Instantiate(objectPrefabs[objType], transform);
 
-        // go.transform.parent = null;
+        // 나의 오브젝트 id 설정
+        myObjectId = id;
 
         // objType 을 type 에 설정
         type = (EObjectType)objType;
