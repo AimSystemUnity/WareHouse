@@ -10,7 +10,8 @@ public enum ENetType
     NET_CONVEYOR_IS_ON,
     NET_CREATE_MY_OBJECT,
     NET_ADD_OBJECT,
-    NET_BOT_TRANSFORM
+    NET_BOT_TRANSFORM,
+    NET_SEND_TRIGGER
 }
 
 public class UDPServer : MonoBehaviour

@@ -113,6 +113,7 @@ public class UDPClient : MonoBehaviour
         string receiveMessage = Encoding.UTF8.GetString(receiveBytes);
 
         print("서버에서 옴 : " + receiveMessage);
+        
         // receiveMessage 큐에 쌓자
         allMessage.Add(receiveMessage);
 

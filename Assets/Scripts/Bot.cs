@@ -40,6 +40,10 @@ public class Bot : NetView
     Vector3 startPos;
     // 도착 위치값
     Vector3 endPos;
+    // 이전 회전값
+    Quaternion startRot;
+    // 도착 회전값
+    Quaternion endRot;
     // 걸리 시간
     float timeTaken;
 
@@ -63,6 +67,7 @@ public class Bot : NetView
 
         // 현재 위치를 startPos 설정
         startPos = transform.position;
+        startRot = transform.rotation;
     }
 
     void Update()
@@ -95,11 +100,16 @@ public class Bot : NetView
                     jObect["net_type"] = (int)ENetType.NET_BOT_TRANSFORM;
                     jObect["s_pos"] = JsonUtility.ToJson(startPos);
                     jObect["e_pos"] = JsonUtility.ToJson(transform.position);
+                    jObect["s_rot"] = JsonUtility.ToJson(startRot);
+                    jObect["e_rot"] = JsonUtility.ToJson(transform.rotation);
+                    
                     jObect["time"] = currTime;
                     UDPServer.instance.SendData(jObect.ToString());
 
                     currTime = 0;
+                    // 이전 값을 갱신
                     startPos = transform.position;
+                    startRot = transform.rotation;
                 }
             }
         }
@@ -113,6 +123,7 @@ public class Bot : NetView
                 float ratio = currTime / timeTaken;
                 if (ratio > 1) ratio = 1;
                 transform.position = Vector3.Lerp(startPos, endPos, ratio);
+                transform.rotation = Quaternion.Lerp(startRot, endRot, ratio);
             }
         }
     }
@@ -145,7 +156,7 @@ public class Bot : NetView
             // 현재 목적지를 storage 로!
             moveTarget = storage;
             // CARRY 애니메이션 실행
-            anim.SetTrigger("CARRY");
+            SendTrigger("CARRY");
         }        
     }
 
@@ -162,7 +173,7 @@ public class Bot : NetView
             // 내가 들고 있는 wooden 삭제
             Destroy(wooden.gameObject);
             // MOVE 애니메이션 실행
-            anim.SetTrigger("MOVE");
+            SendTrigger("MOVE");
 
             // 창고에 쌓인 갯수를 증가시키자.
             storage.GetComponent<Storage>().AddCount();
@@ -178,7 +189,7 @@ public class Bot : NetView
             // 현재 상태를 IDLE 로
             currState = EBotState.IDLE;
             // IDLE 애니메이션 실행
-            anim.SetTrigger("IDLE");
+            SendTrigger("IDLE");
         }
     }
 
@@ -206,6 +217,16 @@ public class Bot : NetView
         }
     }
 
+    void SendTrigger(string trigger)
+    {
+        JObject jObject = new JObject();
+        jObject["net_id"] = netId;
+        jObject["net_type"] = (int)ENetType.NET_SEND_TRIGGER;
+        jObject["trigger"] = trigger;
+
+        UDPServer.instance.SendData(jObject.ToString());
+    }
+
     public override JObject OnMessage(string message)
     {
         JObject jObject =  base.OnMessage(message);
@@ -216,9 +237,15 @@ public class Bot : NetView
             {
                 startPos = JsonUtility.FromJson<Vector3>(jObject["s_pos"].ToString());
                 endPos = JsonUtility.FromJson<Vector3>(jObject["e_pos"].ToString());
+                startRot = JsonUtility.FromJson<Quaternion>(jObject["s_rot"].ToString());
+                endRot = JsonUtility.FromJson<Quaternion>(jObject["e_rot"].ToString());
                 timeTaken = jObject["time"].ToObject<float>();
                 currTime = 0;
             }
+        }
+        else if(jObject["net_type"].ToObject<ENetType>() == ENetType.NET_SEND_TRIGGER)
+        {
+            anim.SetTrigger(jObject["trigger"].ToString());
         }
 
         return jObject;
