@@ -1,7 +1,8 @@
-﻿using UnityEngine;
+﻿using Newtonsoft.Json.Linq;
+using UnityEngine;
 using UnityEngine.AI;
 
-public class Bot : MonoBehaviour
+public class Bot : NetView
 {
     // Bot 의 상태
     public enum EBotState
@@ -32,8 +33,10 @@ public class Bot : MonoBehaviour
     // Hip Transform
     public Transform hip;
 
-    void Start()
+    protected override void Start()
     {
+        base.Start();
+
         // GameManager 에게 나를 알려주자.
         GameManager.instance.allBot.Add(this);
         // 초기 Transform 설정
@@ -51,17 +54,33 @@ public class Bot : MonoBehaviour
 
     void Update()
     {
-        switch(currState)
+        // 만약에 서버라면
+        if(GameManager.instance.isServer)
         {
-            case EBotState.MOVE_TO_OBJECT:
-                UpdateMoveToObject();
-                break;
-            case EBotState.MOVE_TO_STORAGE:
-                UpdateMoveToStorage();
-                break;
-            case EBotState.MOVE_TO_ORIGIN:
-                UpdateMoveToOrigin();
-                break;
+            switch(currState)
+            {
+                case EBotState.MOVE_TO_OBJECT:
+                    UpdateMoveToObject();
+                    break;
+                case EBotState.MOVE_TO_STORAGE:
+                    UpdateMoveToStorage();
+                    break;
+                case EBotState.MOVE_TO_ORIGIN:
+                    UpdateMoveToOrigin();
+                    break;
+            }
+
+            // 1 초에 30 번 나의 위치를 클라이언트에게 알려주자!
+            JObject jObect = new JObject();
+            jObect["net_id"] = netId;
+            jObect["net_type"] = (int)ENetType.NET_BOT_TRANSFORM;
+            jObect["pos"] = JsonUtility.ToJson(transform.position);
+            UDPServer.instance.SendData(jObect.ToString());
+
+        }
+        else
+        {
+            // 서버에서 온 데이터로 움직이자.
         }
     }
 
@@ -152,5 +171,21 @@ public class Bot : MonoBehaviour
 
             return false;
         }
+    }
+
+    public override JObject OnMessage(string message)
+    {
+        JObject jObject =  base.OnMessage(message);
+
+        if (jObject["net_type"].ToObject<ENetType>() == ENetType.NET_BOT_TRANSFORM)
+        {
+            if(GameManager.instance.isServer == false)
+            {
+                Vector3 pos = JsonUtility.FromJson<Vector3>(jObject["pos"].ToString());
+                transform.position = pos;
+            }
+        }
+
+        return jObject;
     }
 }
