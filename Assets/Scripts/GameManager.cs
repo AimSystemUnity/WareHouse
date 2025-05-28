@@ -87,12 +87,11 @@ public class GameManager : NetView
         UDPServer.instance.SendData(jObject.ToString());
     }
 
-    public override void OnMessage(string message)
+    public override JObject OnMessage(string message)
     {
-        base.OnMessage(message);
+        JObject jObject = base.OnMessage(message);
 
         // message --> JObject 변환
-        JObject jObject = JObject.Parse(message);
         ENetType type = jObject["net_type"].ToObject<ENetType>();
 
         if (type == ENetType.NET_CONVEYOR_IS_ON)
@@ -110,6 +109,8 @@ public class GameManager : NetView
                 delegateOnOff();
             }
         }
+
+        return jObject;
     }
 
 

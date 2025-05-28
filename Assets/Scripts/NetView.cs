@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Newtonsoft.Json.Linq;
+using UnityEngine;
 
 public class NetView : MonoBehaviour
 {
@@ -11,5 +12,8 @@ public class NetView : MonoBehaviour
     }
 
     // 서버에서 응답받는 함수
-    public virtual void OnMessage(string message) { }
+    public virtual JObject OnMessage(string message) 
+    {
+        return JObject.Parse(message);
+    }
 }
