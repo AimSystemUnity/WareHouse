@@ -38,7 +38,7 @@ public class UDPClient : MonoBehaviour
     // NetView 오브젝트 가지고 있는 Dictionary
     Dictionary<long, NetView> allNetView = new Dictionary<long, NetView>();
     // 마지막 NetView 의 id
-    long lastNetid;
+    long lastNetid = 1000;
 
     void Start()
     {
@@ -82,13 +82,19 @@ public class UDPClient : MonoBehaviour
 
     public long AddNetView(NetView view)
     {
-        // 마지막 NetView 의 id 증가
-        lastNetid++;
+        long id = view.netId;
+        // 만약에 netId 가 0이면
+        if(id == 0)
+        {
+            // 마지막 NetView 의 id 증가
+            lastNetid++;
+            id = lastNetid;
+        }
 
         // allNetView 에 추가 (Key : lastNetid, value : view)
-        allNetView[lastNetid] = view;
+        allNetView[id] = view;
 
-        return lastNetid;
+        return id;
     }
 
     void SendData(string message)

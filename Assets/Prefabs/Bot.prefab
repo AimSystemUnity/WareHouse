@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8596934683a4c246846feeb0cc31ae3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  netId: 0
   currState: 0
   moveTarget: {fileID: 0}
   origin: {fileID: 0}

@@ -33,6 +33,16 @@ public class Bot : NetView
     // Hip Transform
     public Transform hip;
 
+    // 현재 시간
+    float currTime;
+
+    // 이전 위치값
+    Vector3 startPos;
+    // 도착 위치값
+    Vector3 endPos;
+    // 걸리 시간
+    float timeTaken;
+
     protected override void Start()
     {
         base.Start();
@@ -50,6 +60,9 @@ public class Bot : NetView
 
         // 자식에 있는 Animator 컴포넌트 가져오자
         anim = GetComponentInChildren<Animator>();
+
+        // 현재 위치를 startPos 설정
+        startPos = transform.position;
     }
 
     void Update()
@@ -71,16 +84,36 @@ public class Bot : NetView
             }
 
             // 1 초에 30 번 나의 위치를 클라이언트에게 알려주자!
-            JObject jObect = new JObject();
-            jObect["net_id"] = netId;
-            jObect["net_type"] = (int)ENetType.NET_BOT_TRANSFORM;
-            jObect["pos"] = JsonUtility.ToJson(transform.position);
-            UDPServer.instance.SendData(jObect.ToString());
+            currTime += Time.deltaTime;
+            if(currTime > 1.0f / 10)
+            {
+                float dist = Vector3.Distance(startPos, transform.position);
+                if (dist > 0)
+                {
+                    JObject jObect = new JObject();
+                    jObect["net_id"] = netId;
+                    jObect["net_type"] = (int)ENetType.NET_BOT_TRANSFORM;
+                    jObect["s_pos"] = JsonUtility.ToJson(startPos);
+                    jObect["e_pos"] = JsonUtility.ToJson(transform.position);
+                    jObect["time"] = currTime;
+                    UDPServer.instance.SendData(jObect.ToString());
 
+                    currTime = 0;
+                    startPos = transform.position;
+                }
+            }
         }
         else
         {
             // 서버에서 온 데이터로 움직이자.
+            if(currTime < timeTaken)
+            {
+                currTime += Time.deltaTime;
+                // currTime 과 timeTaken 비율
+                float ratio = currTime / timeTaken;
+                if (ratio > 1) ratio = 1;
+                transform.position = Vector3.Lerp(startPos, endPos, ratio);
+            }
         }
     }
 
@@ -181,8 +214,10 @@ public class Bot : NetView
         {
             if(GameManager.instance.isServer == false)
             {
-                Vector3 pos = JsonUtility.FromJson<Vector3>(jObject["pos"].ToString());
-                transform.position = pos;
+                startPos = JsonUtility.FromJson<Vector3>(jObject["s_pos"].ToString());
+                endPos = JsonUtility.FromJson<Vector3>(jObject["e_pos"].ToString());
+                timeTaken = jObject["time"].ToObject<float>();
+                currTime = 0;
             }
         }
 
