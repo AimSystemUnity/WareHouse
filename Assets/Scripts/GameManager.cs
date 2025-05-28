@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameManager : MonoBehaviour
+public class GameManager : NetView
 {
     // 나 자신
     public static GameManager instance;
@@ -18,9 +19,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void Start()
+    protected override void Start()
     {
-        
+        // 부모의 Start 함수
+        base.Start();
     }
 
     void Update()
@@ -77,6 +79,7 @@ public class GameManager : MonoBehaviour
 
         // 클라에게 보내고자 하는 Json 데이터를 만들자.
         JObject jObject = new JObject();
+        jObject["net_id"] = netId;
         jObject["net_type"] = (int)ENetType.NET_CONVEYOR_IS_ON;
         jObject["is_on"] = !isOn;
 
@@ -84,13 +87,15 @@ public class GameManager : MonoBehaviour
         UDPServer.instance.SendData(jObject.ToString());
     }
 
-    public void OnOff(string message)
+    public override void OnMessage(string message)
     {
+        base.OnMessage(message);
+
         // message --> JObject 변환
         JObject jObject = JObject.Parse(message);
         ENetType type = jObject["net_type"].ToObject<ENetType>();
 
-        if(type == ENetType.NET_CONVEYOR_IS_ON)
+        if (type == ENetType.NET_CONVEYOR_IS_ON)
         {
             // true -> false, false -> true
             isOn = jObject["is_on"].ToObject<bool>();
@@ -104,8 +109,9 @@ public class GameManager : MonoBehaviour
                 // delegateOnOff 에 들어있는 함수를 호출
                 delegateOnOff();
             }
-        }        
+        }
     }
+
 
     public void FindClosestBot(Transform wooden, Transform storage)
     {
