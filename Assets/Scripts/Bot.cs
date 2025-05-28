@@ -148,11 +148,7 @@ public class Bot : NetView
         {
             // 현재 상태를 MOVE_TO_STORAGE 로
             currState = EBotState.MOVE_TO_STORAGE;
-            // wooden을 나의 자식 (wooden 의 부모를 나로한다)
-            wooden.parent = hip;
-            wooden.localPosition = new Vector3(0, -0.06f, 0.88f);
-            wooden.localEulerAngles = new Vector3(356.34f, 176.17f, 358.34f);
-
+            
             // 현재 목적지를 storage 로!
             moveTarget = storage;
             // CARRY 애니메이션 실행
@@ -170,8 +166,7 @@ public class Bot : NetView
             currState = EBotState.MOVE_TO_ORIGIN;
             // 현재 목적지를 처음 위치로!
             moveTarget = origin;
-            // 내가 들고 있는 wooden 삭제
-            Destroy(wooden.gameObject);
+            
             // MOVE 애니메이션 실행
             SendTrigger("MOVE");
 
@@ -245,7 +240,32 @@ public class Bot : NetView
         }
         else if(jObject["net_type"].ToObject<ENetType>() == ENetType.NET_SEND_TRIGGER)
         {
-            anim.SetTrigger(jObject["trigger"].ToString());
+            string trigger = jObject["trigger"].ToString();
+            // trigger 애니메이션 실행
+            anim.SetTrigger(trigger);
+
+            // 만약에 trigger 가 CARRY 라면
+            if (trigger.Equals("CARRY"))
+            {
+                // wooden을 나의 자식 (wooden 의 부모를 나로한다)
+                wooden.parent = hip;
+                wooden.localPosition = new Vector3(0, -0.06f, 0.88f);
+                wooden.localEulerAngles = new Vector3(356.34f, 176.17f, 358.34f);
+
+                currState = EBotState.MOVE_TO_STORAGE;
+            }
+            // trigger 가 MOVE 라면
+            else if (trigger.Equals("MOVE"))
+            {
+                // 내가 들고 있는 wooden 삭제
+                Destroy(wooden.gameObject);
+
+                currState = EBotState.MOVE_TO_ORIGIN;
+            }
+            else if(trigger.Equals("IDLE"))
+            {
+                currState = EBotState.IDLE;
+            }
         }
 
         return jObject;
