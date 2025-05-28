@@ -8,7 +8,8 @@ using UnityEngine;
 public enum ENetType
 {
     NET_CONVEYOR_IS_ON,
-    NET_CREATE_MY_OBJECT
+    NET_CREATE_MY_OBJECT,
+    NET_ADD_OBJECT
 }
 
 public class UDPServer : MonoBehaviour
