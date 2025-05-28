@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class PaletteWooden : MonoBehaviour
+public class PaletteWooden : NetView
 {
     // 물건이 올라가야할 위치
     public Transform[] pos;

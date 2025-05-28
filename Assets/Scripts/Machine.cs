@@ -89,7 +89,7 @@ public class Machine : NetView
 
                 // 가득판 나무판 갯수에 따라서 위치를 변경
                 trFullWoodenParent.localPosition += Vector3.left * 2;
-
+                                
                 // 로봇에게 wooden 옮기라고 명령
                 GameManager.instance.FindClosestBot(wooden.transform, storage);
 

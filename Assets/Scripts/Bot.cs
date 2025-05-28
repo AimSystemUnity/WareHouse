@@ -130,14 +130,22 @@ public class Bot : NetView
 
     public void ChageMoveToObject(Transform _wooden, Transform _storage)
     {
-        // 현재 상태를 MOVE_TO_OBJECT 로
-        currState = EBotState.MOVE_TO_OBJECT;
-        // 현재 목적지를 wooden 으로
-        moveTarget = wooden = _wooden;
-        // 창고 transform
-        storage = _storage;
-        // MOVE 애니메이션 실행
-        anim.SetTrigger("MOVE");
+        JObject jObject = new JObject();
+        jObject["net_id"] = netId;
+        jObject["net_type"] = (int)ENetType.NET_MOVE_TO_OBJECT;
+        jObject["wooden_net_id"] = _wooden.GetComponent<NetView>().netId;
+        jObject["storage_net_id"] = _storage.GetComponent<NetView>().netId;
+
+        UDPServer.instance.SendData(jObject.ToString());
+
+        //// 현재 상태를 MOVE_TO_OBJECT 로
+        //currState = EBotState.MOVE_TO_OBJECT;
+        //// 현재 목적지를 wooden 으로
+        //moveTarget = wooden = _wooden;
+        //// 창고 transform
+        //storage = _storage;
+        //// MOVE 애니메이션 실행
+        //anim.SetTrigger("MOVE");
     }
 
     void UpdateMoveToObject()
@@ -266,6 +274,18 @@ public class Bot : NetView
             {
                 currState = EBotState.IDLE;
             }
+        }
+
+        else if(jObject["net_type"].ToObject<ENetType>() == ENetType.NET_MOVE_TO_OBJECT)
+        {
+            // 현재 상태를 MOVE_TO_OBJECT 로
+            currState = EBotState.MOVE_TO_OBJECT;
+            // 현재 목적지를 wooden 으로
+            moveTarget = wooden = UDPClient.instance.allNetView[jObject["wooden_net_id"].ToObject<int>()].transform;
+            // 창고 transform
+            storage = UDPClient.instance.allNetView[jObject["storage_net_id"].ToObject<int>()].transform;
+            // MOVE 애니메이션 실행
+            anim.SetTrigger("MOVE");
         }
 
         return jObject;

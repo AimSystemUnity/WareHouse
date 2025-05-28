@@ -36,7 +36,7 @@ public class UDPClient : MonoBehaviour
     List<string> allMessage = new List<string>();
 
     // NetView 오브젝트 가지고 있는 Dictionary
-    Dictionary<long, NetView> allNetView = new Dictionary<long, NetView>();
+    public Dictionary<long, NetView> allNetView = new Dictionary<long, NetView>();
     // 마지막 NetView 의 id
     long lastNetid = 1000;
 

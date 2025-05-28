@@ -116,6 +116,8 @@ public class GameManager : NetView
 
     public void FindClosestBot(Transform wooden, Transform storage)
     {
+        if (isServer == false) return;
+
         // 현재 최단 거리
         float minDist = float.MaxValue;
         // 현재 최단 거리 idx
