@@ -799,6 +799,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1051856692}
     m_Modifications:
+    - target: {fileID: 2326366880118320373, guid: 0519ca178e52c234981513a3746bff29, type: 3}
+      propertyPath: netId
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 8124348107181532593, guid: 0519ca178e52c234981513a3746bff29, type: 3}
       propertyPath: m_Name
       value: Garage
@@ -1024,6 +1028,10 @@ PrefabInstance:
     - target: {fileID: 2326366880118320373, guid: 0519ca178e52c234981513a3746bff29, type: 3}
       propertyPath: type
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2326366880118320373, guid: 0519ca178e52c234981513a3746bff29, type: 3}
+      propertyPath: netId
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 8124348107181532593, guid: 0519ca178e52c234981513a3746bff29, type: 3}
       propertyPath: m_Name
@@ -2206,6 +2214,10 @@ PrefabInstance:
     - target: {fileID: 2326366880118320373, guid: 0519ca178e52c234981513a3746bff29, type: 3}
       propertyPath: type
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2326366880118320373, guid: 0519ca178e52c234981513a3746bff29, type: 3}
+      propertyPath: netId
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 8124348107181532593, guid: 0519ca178e52c234981513a3746bff29, type: 3}
       propertyPath: m_Name

@@ -11,7 +11,8 @@ public enum ENetType
     NET_CREATE_MY_OBJECT,
     NET_ADD_OBJECT,
     NET_BOT_TRANSFORM,
-    NET_SEND_TRIGGER
+    NET_SEND_TRIGGER,
+    NET_ADD_STORAGE_COUNT
 }
 
 public class UDPServer : MonoBehaviour
