@@ -1,10 +1,10 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using Newtonsoft.Json.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class UDPClient : MonoBehaviour
@@ -33,7 +33,7 @@ public class UDPClient : MonoBehaviour
     int port = 7777;
 
     // 서버에 보내진 데이터를 쌓아놓는 변수
-    List<string> allMessage = new List<string>();
+    ConcurrentQueue<string> allMessage = new ConcurrentQueue<string>();
 
     // NetView 오브젝트 가지고 있는 Dictionary
     public Dictionary<long, NetView> allNetView = new Dictionary<long, NetView>();
@@ -56,27 +56,15 @@ public class UDPClient : MonoBehaviour
 
     void Update()
     {
-        // 만약에 allMessage 의 갯수가 0 보다 크면
-        if(allMessage.Count > 0)
+        while(allMessage.TryDequeue(out string msg))
         {
-            // allMessage 의 갯수
-            int msgCnt = allMessage.Count;
-            //allMessage 에 있는 데이터를 처리
-            for (int i = 0; i < msgCnt; i++)
-            {
-                // 0 번째 데이터
-                string msg = allMessage[0];
-                // allMessage 에서 0번째 제거
-                allMessage.RemoveAt(0);
+            // msg -> JObject 로 변환
+            JObject jObject = JObject.Parse(msg);
+            if (jObject.ContainsKey("net_id") == false) continue;
 
-                // msg -> JObject 로 변환
-                JObject jObject = JObject.Parse(msg);
-                if (jObject.ContainsKey("net_id") == false) continue;
-
-                long net_id = jObject["net_id"].ToObject<long>();
-                // allNetView 의 net_id 에 해당되는 오브젝트의 OnMessage 함수 실행
-                allNetView[net_id].OnMessage(msg);
-            }
+            long net_id = jObject["net_id"].ToObject<long>();
+            // allNetView 의 net_id 에 해당되는 오브젝트의 OnMessage 함수 실행
+            allNetView[net_id].OnMessage(msg);
         }
     }
 
@@ -115,7 +103,7 @@ public class UDPClient : MonoBehaviour
         print("서버에서 옴 : " + receiveMessage);
         
         // receiveMessage 큐에 쌓자
-        allMessage.Add(receiveMessage);
+        allMessage.Enqueue(receiveMessage);
 
         // 서버에서 메시지 받을 함수 등록
         udpClient.BeginReceive(ReceiveData, null);
